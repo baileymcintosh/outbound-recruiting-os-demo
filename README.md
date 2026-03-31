@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Outbound Recruiting OS
 
-## Getting Started
+Speed-first outbound engine for student recruiting outreach.
 
-First, run the development server:
+## Flow
+
+1. Sign up with Supabase auth
+2. Search the alumni/contact database
+3. Select targets and create a campaign
+4. Connect Gmail
+5. Run the send queue and auto-schedule follow-ups
+
+## Stack
+
+- Next.js App Router
+- Supabase for auth + Postgres
+- Gmail API for sending
+- Vercel cron routes for queue processing
+
+## Local setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Copy `.env.example` to `.env.local` and fill in the values.
+
+3. In Supabase SQL editor, run:
+
+```sql
+\i supabase/migrations/001_init.sql
+\i supabase/seed.sql
+```
+
+4. In Google Cloud:
+
+- Enable `Gmail API`
+- Configure the OAuth consent screen
+- Add redirect URI: `http://localhost:3000/api/gmail/callback`
+
+5. Start the app:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Routes
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `/login`
+- `/search`
+- `/dashboard`
+- `/campaigns/[id]`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Public Demo
 
-## Learn More
+A public static demo site lives under `docs/` and is intended for GitHub Pages deployment.
 
-To learn more about Next.js, take a look at the following resources:
+- It is generated from an anonymized export of `Networking Tracker.xlsx`
+- Names are masked
+- Direct contact details are hidden
+- Campaign activity is simulated client-side in browser storage
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To regenerate the public demo dataset locally:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+python scripts/generate_public_demo_data.py
+```
 
-## Deploy on Vercel
+## Queue workers
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `/api/cron/send` sends due emails
+- `/api/cron/follow-up` schedules follow-ups after 5 days without a marked reply
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The campaign page can trigger both locally. Production cron config lives in `vercel.json`.

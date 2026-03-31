@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Outbound Recruiting OS Demo</title>
+    <meta
+      name="description"
+      content="Public demo for Outbound Recruiting OS, a speed-focused outbound workflow for student networking."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="kicker">Outbound Recruiting OS</span>
+          <h1>Public product demo</h1>
+          <p>Search an anonymized networking dataset, build a target list, and simulate an outreach campaign.</p>
+        </div>
+        <nav class="nav">
+          <button data-route="search" class="nav-button active">Search</button>
+          <button data-route="dashboard" class="nav-button">Dashboard</button>
+          <button data-route="campaigns" class="nav-button">Campaigns</button>
+        </nav>
+      </header>
+
+      <section class="banner">
+        <strong>Privacy note:</strong>
+        <span>This public demo uses an anonymized export of the private networking tracker. Names and direct contact details are masked.</span>
+      </section>
+
+      <main id="app"></main>
+    </div>
+
+    <script src="./app.js" type="module"></script>
+  </body>
+</html>
